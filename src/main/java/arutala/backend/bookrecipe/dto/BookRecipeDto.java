@@ -32,4 +32,8 @@ public class BookRecipeDto {
 
     @JsonProperty("is_favorite")
     private Boolean isFavorite;
+
+    private CategoryDto categories;
+
+    private LevelDto levels;
 }
