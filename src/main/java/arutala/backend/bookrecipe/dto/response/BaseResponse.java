@@ -1,4 +1,4 @@
-package arutala.backend.bookrecipe.model.dto.response;
+package arutala.backend.bookrecipe.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
