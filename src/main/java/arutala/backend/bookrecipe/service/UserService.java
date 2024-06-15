@@ -1,8 +1,7 @@
 package arutala.backend.bookrecipe.service;
 
 import arutala.backend.bookrecipe.model.User;
-import arutala.backend.bookrecipe.model.dto.request.SignInRequest;
-import arutala.backend.bookrecipe.model.dto.request.SignUpRequest;
+import arutala.backend.bookrecipe.dto.request.SignUpRequest;
 import arutala.backend.bookrecipe.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
