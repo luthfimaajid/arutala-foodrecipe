@@ -5,11 +5,15 @@ import arutala.backend.bookrecipe.model.dto.request.SignInRequest;
 import arutala.backend.bookrecipe.model.dto.request.SignUpRequest;
 import arutala.backend.bookrecipe.model.dto.response.BaseResponse;
 import arutala.backend.bookrecipe.service.UserService;
+import arutala.backend.bookrecipe.util.ResponseHandler;
+import arutala.backend.bookrecipe.util.ResponseMessage;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.coyote.BadRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Map;
 
@@ -21,21 +25,19 @@ public class UserController {
     UserService userService;
 
     @GetMapping("/sign-in")
-    public ResponseEntity<Object> signIn(@RequestBody SignInRequest signInRequest) {
-
-        return new ResponseEntity<>(HttpStatus.OK);
+    public ResponseEntity<Object> signIn(@RequestBody SignInRequest signInRequest) throws BadRequestException {
+        throw new BadRequestException("data tidak lengkap");
+//        try {
+//            return new ResponseEntity<>(HttpStatus.OK);
+//        } catch (Exception e) {
+//            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+//        }
     }
 
     @PostMapping("/sign-up")
     public ResponseEntity<Object> signUp(@RequestBody SignUpRequest signUpRequest) {
         User user = userService.signUp(signUpRequest);
 
-        BaseResponse baseResponse = BaseResponse.builder()
-                .message(String.format("User %s registered successfully!", user.getUsername()))
-                .statusCode(HttpStatus.CREATED.value())
-                .status(HttpStatus.CREATED.getReasonPhrase())
-                .build();
-
-        return new ResponseEntity<>(baseResponse, HttpStatus.CREATED);
+        return ResponseHandler.created(String.format(ResponseMessage.Success.USER_CREATED, user.getUsername()));
     }
 }
