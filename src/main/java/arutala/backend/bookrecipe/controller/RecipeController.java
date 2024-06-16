@@ -24,9 +24,13 @@ public class RecipeController {
     private RecipeService recipeService;
 
     @GetMapping("/my-recipes")
-    public ResponseEntity<Object> getMyBookRecipes() {
-        // pass user id from jwt auth details
-        return ResponseEntity.ok().build();
+    public ResponseEntity<Object> getMyBookRecipes(GetRecipesQueryParams params) {
+        MyUserDetails userDetails = UserDetailsServiceImpl.getUserDetailsFromContext();
+        params.setUserId(userDetails.getId());
+
+        List<RecipeDto> bookRecipes = recipeService.getBookRecipes(params);
+
+        return ResponseHandler.ok(ResponseMessage.Success.DEFAULT, bookRecipes);
     }
 
     @GetMapping("/book-recipes")
