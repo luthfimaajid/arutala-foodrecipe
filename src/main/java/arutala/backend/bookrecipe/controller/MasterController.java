@@ -1,6 +1,7 @@
 package arutala.backend.bookrecipe.controller;
 
 import arutala.backend.bookrecipe.model.MyUserDetails;
+import arutala.backend.bookrecipe.service.UserDetailsServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -16,8 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class MasterController {
     @GetMapping("/category-option-lists")
     public ResponseEntity<Object> getCategories() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        MyUserDetails userDetails = (MyUserDetails) authentication.getPrincipal();
+        MyUserDetails userDetails = UserDetailsServiceImpl.getUserDetailsFromContext();
         log.info(userDetails.toString());
 
         return ResponseEntity.ok().build();
@@ -25,8 +25,8 @@ public class MasterController {
 
     @GetMapping("/level-option-lists")
     public ResponseEntity<Object> getLevels() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        MyUserDetails userDetails = (MyUserDetails) authentication.getPrincipal();
+        MyUserDetails userDetails = UserDetailsServiceImpl.getUserDetailsFromContext();
+
         log.info(userDetails.toString());
         return ResponseEntity.ok().build();
     }

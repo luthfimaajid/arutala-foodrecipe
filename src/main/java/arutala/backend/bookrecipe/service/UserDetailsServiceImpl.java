@@ -2,19 +2,16 @@ package arutala.backend.bookrecipe.service;
 
 import arutala.backend.bookrecipe.model.MyUserDetails;
 import arutala.backend.bookrecipe.model.User;
-import arutala.backend.bookrecipe.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.util.Collection;
-import java.util.Collections;
 
 @AllArgsConstructor
 @Service
@@ -36,5 +33,10 @@ public class UserDetailsServiceImpl implements UserDetailsService {
                 .password(user.getPassword())
                 .role(user.getRole())
                 .build();
+    }
+
+    public static MyUserDetails getUserDetailsFromContext() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        return (MyUserDetails) authentication.getPrincipal();
     }
 }
