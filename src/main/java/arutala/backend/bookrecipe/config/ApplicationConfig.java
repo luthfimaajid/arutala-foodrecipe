@@ -1,5 +1,6 @@
 package arutala.backend.bookrecipe.config;
 
+import arutala.backend.bookrecipe.util.MinIo;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.domain.AuditorAware;
@@ -19,4 +20,9 @@ public class ApplicationConfig {
     public AuditorAware auditorAware() {
         return new AuditorAwareImpl();
     }
+
+//    @Bean
+//    public MinIo minIo() {
+//        return new MinIo();
+//    }
 }

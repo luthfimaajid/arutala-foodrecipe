@@ -24,6 +24,7 @@ import java.util.List;
 public class Recipe {
     @Id
     @Column(name = "recipe_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @ManyToOne

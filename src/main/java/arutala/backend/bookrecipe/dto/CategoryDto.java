@@ -1,5 +1,6 @@
 package arutala.backend.bookrecipe.dto;
 
+import arutala.backend.bookrecipe.model.Category;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
@@ -18,4 +19,11 @@ public class CategoryDto {
 
     @JsonProperty("category_name")
     private String categoryName;
+
+    public static CategoryDto createFromModel(Category category) {
+        return CategoryDto.builder()
+                .categoryId(category.getId())
+                .categoryName(category.getCategoryName())
+                .build();
+    }
 }
