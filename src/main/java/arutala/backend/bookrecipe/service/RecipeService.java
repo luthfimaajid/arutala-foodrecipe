@@ -9,7 +9,6 @@ import arutala.backend.bookrecipe.repository.specification.RecipeSpecification;
 import arutala.backend.bookrecipe.util.MinIo;
 import arutala.backend.bookrecipe.util.ResponseMessage;
 import jakarta.persistence.EntityNotFoundException;
-import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,11 +42,11 @@ public class RecipeService {
         Level level = masterService.getLevelById(request.getLevel_id());
         Category category = masterService.getCategoryById(request.getCategory_id());
 
-        String fileType = request.getImage().getContentType().split("/")[1];
+        String fileType = request.getImage_filename().getContentType().split("/")[1];
         Long time = Instant.now().getEpochSecond();
         String imageFilename = String.format("%s_%s_%s.%s", request.getRecipe_name(), level.getLevelName(), time, fileType);
 
-        minIo.upload(imageFilename, request.getImage());
+        minIo.upload(imageFilename, request.getImage_filename());
 
         Recipe recipe = Recipe.builder()
                 .user(user)
@@ -123,5 +122,28 @@ public class RecipeService {
     public RecipeDto getRecipeDetailById(MyUserDetails userDetails, Integer recipeId) {
         Recipe recipe = recipeRepository.findByIdAndUserId(recipeId, userDetails.getId()).orElseThrow(() -> new EntityNotFoundException(ResponseMessage.Failed.RECIPE_NOT_FOUND));
         return RecipeDto.createGetRecipeDetailDto(recipe);
+    }
+
+    public Recipe updateRecipe(MyUserDetails userDetails, Integer recipeId, AddRecipeRequest request) {
+        Recipe recipe = recipeRepository.findByIdAndUserId(recipeId, userDetails.getId()).orElseThrow(() -> new EntityNotFoundException(ResponseMessage.Failed.RECIPE_NOT_FOUND));
+
+        Level level = masterService.getLevelById(request.getLevel_id());
+        Category category = masterService.getCategoryById(request.getCategory_id());
+
+        String fileType = request.getImage_filename().getContentType().split("/")[1];
+        Long time = Instant.now().getEpochSecond();
+        String imageFilename = String.format("%s_%s_%s.%s", request.getRecipe_name(), level.getLevelName(), time, fileType);
+
+        minIo.upload(imageFilename, request.getImage_filename());
+
+        recipe.setRecipeName(request.getRecipe_name());
+        recipe.setCategory(category);
+        recipe.setLevel(level);
+        recipe.setImageFilename(imageFilename);
+        recipe.setTimeCook(request.getTime_cook());
+        recipe.setHowToCook(request.getHow_to_cook());
+        recipe.setIngredient(request.getIngredient());
+
+        return recipeRepository.save(recipe);
     }
 }

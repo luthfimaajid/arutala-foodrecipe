@@ -7,9 +7,8 @@ import org.springframework.web.multipart.MultipartFile;
 @Data
 public class AddRecipeRequest {
     @ToString.Exclude
-    private MultipartFile image;
+    private MultipartFile image_filename;
     private String recipe_name;
-    private String image_filename;
     private String how_to_cook;
     private Integer time_cook;
     private String ingredient;

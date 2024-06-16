@@ -54,13 +54,16 @@ public class RecipeController {
 
         recipeService.addRecipe(userDetails, request);
 
-        return ResponseEntity.ok().build();
+        return ResponseHandler.ok(ResponseMessage.Success.DEFAULT);
     }
 
     @PutMapping("/book-recipes/{recipe_id}")
-    public ResponseEntity<Object> updateBookRecipe(@PathVariable("recipe_id") Integer recipeId, @RequestBody RecipeDto request) {
-        // pass user id from jwt auth details
-        return ResponseEntity.ok().build();
+    public ResponseEntity<Object> updateBookRecipe(@PathVariable("recipe_id") Integer recipeId, @ModelAttribute AddRecipeRequest request) {
+        MyUserDetails userDetails = UserDetailsServiceImpl.getUserDetailsFromContext();
+
+        Recipe recipe = recipeService.updateRecipe(userDetails, recipeId, request);
+
+        return ResponseHandler.ok(String.format(ResponseMessage.Success.RECIPE_UPDATED, recipe.getRecipeName()));
     }
 
     @PutMapping("/book-recipes/{recipe_id}/favorites")

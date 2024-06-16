@@ -6,6 +6,7 @@ public class ResponseMessage {
         public static final String USER_CREATED = "User %s registered successfully!";
         public static final String ADDED_TO_FAVORITE = "Resep %s berhasil ditambahkan ke dalam favorit";
         public static final String REMOVED_FROM_FAVORITE = "Resep %s berhasil dihapus dari favorit";
+        public static final String RECIPE_UPDATED = "Resep %s berhasil diubah!";
     }
 
     public static final class Failed {
