@@ -39,7 +39,7 @@ public class BookRecipeDto {
 
     private LevelDto levels;
 
-    public static BookRecipeDto createFromModel(Recipe recipe) {
+    private static BookRecipeDto createFromModel(Recipe recipe) {
         CategoryDto categoryDto = CategoryDto.createFromModel(recipe.getCategory());
         LevelDto levelDto = LevelDto.createFromModel(recipe.getLevel());
         Boolean isFavorite = Boolean.FALSE;
@@ -58,5 +58,13 @@ public class BookRecipeDto {
                 .categories(categoryDto)
                 .levels(levelDto)
                 .build();
+    }
+
+    public static BookRecipeDto createGetRecipesDto(Recipe recipe) {
+        BookRecipeDto bookRecipeDto = createFromModel(recipe);
+        bookRecipeDto.setHowToCook(null);
+        bookRecipeDto.setIngredient(null);
+
+        return bookRecipeDto;
     }
 }

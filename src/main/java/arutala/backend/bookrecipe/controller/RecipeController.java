@@ -4,6 +4,7 @@ import arutala.backend.bookrecipe.dto.BookRecipeDto;
 import arutala.backend.bookrecipe.dto.request.AddRecipeRequest;
 import arutala.backend.bookrecipe.dto.request.GetRecipesQueryParams;
 import arutala.backend.bookrecipe.model.MyUserDetails;
+import arutala.backend.bookrecipe.model.Recipe;
 import arutala.backend.bookrecipe.service.RecipeService;
 import arutala.backend.bookrecipe.service.UserDetailsServiceImpl;
 import arutala.backend.bookrecipe.util.ResponseHandler;
@@ -62,8 +63,15 @@ public class RecipeController {
 
     @PutMapping("/book-recipes/{recipe_id}/favorites")
     public ResponseEntity<Object> addRecipeToFavorites(@PathVariable("recipe_id") Integer recipeId) {
-        // pass user id from jwt auth details
-        return ResponseEntity.ok().build();
+        MyUserDetails userDetails = UserDetailsServiceImpl.getUserDetailsFromContext();
+
+        Recipe recipe = recipeService.addRecipeToFavorites(userDetails, recipeId);
+        String message = ResponseMessage.Success.ADDED_TO_FAVORITE;
+        if (!recipe.getFavoriteFood().getIsFavorite()) {
+            message = ResponseMessage.Success.REMOVED_FROM_FAVORITE;
+        }
+
+        return ResponseHandler.ok(String.format(message, recipe.getRecipeName()), 1);
     }
 
     @DeleteMapping("/book-recipes/{recipe_id}")

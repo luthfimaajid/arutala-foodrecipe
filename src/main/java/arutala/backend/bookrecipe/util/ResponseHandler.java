@@ -6,9 +6,7 @@ import okhttp3.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class ResponseHandler {
     public static ResponseEntity<Object> internalServerError(String message) {
@@ -37,6 +35,10 @@ public class ResponseHandler {
 
     public static ResponseEntity<Object> ok(String message, Object data) {
         return ResponseEntity.ok().body(constructBody(message, HttpStatus.OK, data));
+    }
+
+    public static ResponseEntity<Object> ok(String message, Integer total) {
+        return ResponseEntity.ok().body(constructBody(message, HttpStatus.OK, total));
     }
 
     public static ResponseEntity<Object> created(String message) {
@@ -77,6 +79,16 @@ public class ResponseHandler {
                 .statusCode(httpStatus.value())
                 .status(httpStatus.getReasonPhrase())
                 .errors(errors)
+                .build();
+    }
+
+    private static BaseResponse<Object> constructBody(String message, HttpStatus httpStatus, Integer total) {
+        return BaseResponse.builder()
+                .message(message)
+                .statusCode(httpStatus.value())
+                .status(httpStatus.getReasonPhrase())
+                .total(total)
+                .data(Collections.emptyList())
                 .build();
     }
 }

@@ -28,8 +28,6 @@ public class MasterController {
 
     @GetMapping("/category-option-lists")
     public ResponseEntity<Object> getCategories() {
-        MyUserDetails userDetails = UserDetailsServiceImpl.getUserDetailsFromContext();
-
         List<CategoryDto> categories = masterService.getCategories();
 
         return ResponseHandler.ok(ResponseMessage.Success.DEFAULT, categories);
@@ -37,8 +35,6 @@ public class MasterController {
 
     @GetMapping("/level-option-lists")
     public ResponseEntity<Object> getLevels() {
-        MyUserDetails userDetails = UserDetailsServiceImpl.getUserDetailsFromContext();
-
         List<LevelDto> levels = masterService.getLevels();
 
         return ResponseHandler.ok(ResponseMessage.Success.DEFAULT, levels);

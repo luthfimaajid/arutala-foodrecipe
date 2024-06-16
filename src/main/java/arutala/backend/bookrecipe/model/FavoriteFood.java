@@ -23,14 +23,14 @@ import java.sql.Timestamp;
 @EntityListeners(AuditingEntityListener.class)
 public class FavoriteFood {
     @EmbeddedId
-    FavoriteFoodKey id;
+    FavoriteFoodKey id = new FavoriteFoodKey();
 
-    @ManyToOne
+    @ManyToOne()
     @MapsId("userId")
     @JoinColumn(name = "user_id")
     private User user;
 
-    @OneToOne
+    @OneToOne()
     @MapsId("recipeId")
     @JoinColumn(name = "recipe_id")
     private Recipe recipe;

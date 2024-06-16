@@ -2,15 +2,10 @@ package arutala.backend.bookrecipe.util;
 
 import io.minio.MinioClient;
 import io.minio.PutObjectArgs;
-import io.minio.errors.*;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.io.IOException;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
 
 @Component
 public class MinIo {
@@ -36,9 +31,9 @@ public class MinIo {
                 .build();
     }
 
-    public String upload(String fileName, MultipartFile file) {
+    public void upload(String fileName, MultipartFile file) {
         try {
-            return minioClient.putObject(
+            minioClient.putObject(
                     PutObjectArgs.builder()
                             .bucket(BUCKET)
                             .object(fileName)

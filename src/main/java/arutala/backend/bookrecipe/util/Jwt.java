@@ -26,9 +26,6 @@ public class Jwt {
 //    @Value("${jwt.refresh.expiration}")
 //    private Long refreshTokenExpirationMs;
 
-    private final String JWT_HEADER = "Authorization";
-    private final String JWT_PREFIX = "Bearer";
-
     private JwtBuilder jwtBuilder;
     private JwtParser jwtParser;
 
@@ -54,6 +51,9 @@ public class Jwt {
     }
 
     private String extractTokenFromHeader(HttpServletRequest request) {
+        String JWT_HEADER = "Authorization";
+        String JWT_PREFIX = "Bearer";
+
         String bearerToken = request.getHeader(JWT_HEADER);
 
         if (bearerToken != null && bearerToken.startsWith(JWT_PREFIX)) {
@@ -73,11 +73,6 @@ public class Jwt {
 
     private Boolean isExpired(Claims claims) {
         return claims.getExpiration().before(new Date());
-    }
-
-    private SecretKey getSignKey() {
-        byte[] keyBytes = Decoders.BASE64.decode(JWT_SECRET);
-        return Keys.hmacShaKeyFor(keyBytes);
     }
 
     public Claims resolveJwt(HttpServletRequest request) {

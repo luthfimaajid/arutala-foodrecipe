@@ -39,7 +39,7 @@ public class Recipe {
     @JoinColumn(name = "level_id")
     private Level level;
 
-    @OneToOne(mappedBy = "recipe")
+    @OneToOne(mappedBy = "recipe", cascade = CascadeType.ALL)
     private FavoriteFood favoriteFood;
 
     @Column(name = "recipe_name")

@@ -7,6 +7,8 @@ import arutala.backend.bookrecipe.model.*;
 import arutala.backend.bookrecipe.repository.RecipeRepository;
 import arutala.backend.bookrecipe.repository.specification.RecipeSpecification;
 import arutala.backend.bookrecipe.util.MinIo;
+import arutala.backend.bookrecipe.util.ResponseMessage;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Predicate;
@@ -14,6 +16,7 @@ import jakarta.persistence.criteria.Root;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -98,10 +101,27 @@ public class RecipeService {
                 }
             }
 
-            return recipeRepository.findAll(specification, pageable).stream().map(BookRecipeDto::createFromModel).collect(Collectors.toList());
+            return recipeRepository.findAll(specification, pageable).stream().map(BookRecipeDto::createGetRecipesDto).collect(Collectors.toList());
         } catch (Exception e) {
             log.error(e.getMessage());
             throw e;
         }
+    }
+
+    public Recipe addRecipeToFavorites(MyUserDetails userDetails, Integer recipeId) {
+        Recipe recipe = recipeRepository.findByIdAndUserId(recipeId, userDetails.getId()).orElseThrow(() -> new EntityNotFoundException(ResponseMessage.Failed.RECIPE_NOT_FOUND));
+
+        if (recipe.getFavoriteFood() != null) {
+            recipe.getFavoriteFood().setIsFavorite(!recipe.getFavoriteFood().getIsFavorite());
+        } else {
+            FavoriteFood favoriteFood = new FavoriteFood();
+            favoriteFood.setIsFavorite(Boolean.TRUE);
+            favoriteFood.setRecipe(recipe);
+            favoriteFood.setUser(recipe.getUser());
+
+            recipe.setFavoriteFood(favoriteFood);
+        }
+
+        return recipeRepository.save(recipe);
     }
 }
