@@ -28,7 +28,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     public MyUserDetails loadUserById(Integer id) {
         User user = userService.getUserById(id);
         return MyUserDetails.builder()
-                .id(user.getId().toString())
+                .id(user.getId())
                 .username(user.getUsername())
                 .password(user.getPassword())
                 .role(user.getRole())

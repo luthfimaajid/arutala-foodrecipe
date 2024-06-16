@@ -1,5 +1,6 @@
 package arutala.backend.bookrecipe.model;
 
+import jakarta.persistence.criteria.CriteriaBuilder;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -19,7 +20,7 @@ import java.util.Collections;
 public class MyUserDetails implements UserDetails {
     private String username;
     private String password;
-    private String id;
+    private Integer id;
     private String role;
 
     @Override

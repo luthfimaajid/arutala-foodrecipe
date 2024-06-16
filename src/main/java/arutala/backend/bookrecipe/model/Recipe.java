@@ -39,8 +39,8 @@ public class Recipe {
     @JoinColumn(name = "level_id")
     private Level level;
 
-    @OneToMany(mappedBy = "recipe")
-    private List<FavoriteFood> favoriteFoods;
+    @OneToOne(mappedBy = "recipe")
+    private FavoriteFood favoriteFood;
 
     @Column(name = "recipe_name")
     private String recipeName;

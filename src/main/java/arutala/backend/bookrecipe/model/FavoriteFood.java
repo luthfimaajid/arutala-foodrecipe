@@ -30,7 +30,7 @@ public class FavoriteFood {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @ManyToOne
+    @OneToOne
     @MapsId("recipeId")
     @JoinColumn(name = "recipe_id")
     private Recipe recipe;

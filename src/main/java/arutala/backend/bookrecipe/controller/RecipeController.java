@@ -2,15 +2,19 @@ package arutala.backend.bookrecipe.controller;
 
 import arutala.backend.bookrecipe.dto.BookRecipeDto;
 import arutala.backend.bookrecipe.dto.request.AddRecipeRequest;
+import arutala.backend.bookrecipe.dto.request.GetRecipesQueryParams;
 import arutala.backend.bookrecipe.model.MyUserDetails;
 import arutala.backend.bookrecipe.service.RecipeService;
 import arutala.backend.bookrecipe.service.UserDetailsServiceImpl;
+import arutala.backend.bookrecipe.util.ResponseHandler;
+import arutala.backend.bookrecipe.util.ResponseMessage;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -27,8 +31,13 @@ public class RecipeController {
     }
 
     @GetMapping("/book-recipes")
-    public ResponseEntity<Object> getBookRecipes(@RequestParam Map<String, String> params) {
-        return ResponseEntity.ok().build();
+    public ResponseEntity<Object> getBookRecipes(GetRecipesQueryParams params) {
+        log.info(params.toString());
+        MyUserDetails userDetails = UserDetailsServiceImpl.getUserDetailsFromContext();
+
+        List<BookRecipeDto> bookRecipes = recipeService.getBookRecipes(userDetails, params);
+
+        return ResponseHandler.ok(ResponseMessage.Success.DEFAULT, bookRecipes);
     }
 
     @GetMapping("/book-recipes/{recipe_id}")
