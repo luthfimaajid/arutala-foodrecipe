@@ -1,10 +1,13 @@
 package arutala.backend.bookrecipe.util;
 
+import arutala.backend.bookrecipe.dto.response.BaseResponse;
+import com.fasterxml.jackson.databind.ser.Serializers;
 import okhttp3.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class ResponseHandler {
@@ -18,6 +21,14 @@ public class ResponseHandler {
 
     public static ResponseEntity<Object> badRequset(String message) {
         return ResponseEntity.badRequest().body(constructBody(message, HttpStatus.BAD_REQUEST));
+    }
+
+    public static ResponseEntity<Object> badRequset(String message, List<String> errors) {
+        return ResponseEntity.badRequest().body(constructBody(message, HttpStatus.BAD_REQUEST, errors));
+    }
+
+    public static ResponseEntity<Object> conflict(String message) {
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(constructBody(message, HttpStatus.CONFLICT));
     }
 
     public static ResponseEntity<Object> ok(String message) {
@@ -41,20 +52,31 @@ public class ResponseHandler {
         return new ResponseEntity<>(constructBody(message, httpStatus), httpStatus);
     }
 
-    private static Map<String, Object> constructBody(String message, HttpStatus httpStatus) {
-        Map<String, Object> map = new HashMap<>();
-        map.put("message", message);
-        map.put("statusCode", httpStatus.value());
-        map.put("status", httpStatus.getReasonPhrase());
-        return map;
+    private static BaseResponse<Object> constructBody(String message, HttpStatus httpStatus) {
+        return BaseResponse.builder()
+                .message(message)
+                .statusCode(httpStatus.value())
+                .status(httpStatus.getReasonPhrase())
+                .build();
     }
 
-    private static Map<String, Object> constructBody(String message, HttpStatus httpStatus, Object data) {
-        Map<String, Object> map = new HashMap<>();
-        map.put("statusCode", httpStatus.value());
-        map.put("status", httpStatus.getReasonPhrase());
-        map.put("message", message);
-        map.put("data", data);
-        return map;
+    private static BaseResponse<Object> constructBody(String message, HttpStatus httpStatus, Object data) {
+        return BaseResponse.builder()
+                .message(message)
+                .statusCode(httpStatus.value())
+                .status(httpStatus.getReasonPhrase())
+                .data(data)
+                .total(data instanceof List<?> ? ((List<?>) data).size() : null)
+                .build();
+
+    }
+
+    private static BaseResponse<Object> constructBody(String message, HttpStatus httpStatus, List<String> errors) {
+        return BaseResponse.builder()
+                .message(message)
+                .statusCode(httpStatus.value())
+                .status(httpStatus.getReasonPhrase())
+                .errors(errors)
+                .build();
     }
 }
