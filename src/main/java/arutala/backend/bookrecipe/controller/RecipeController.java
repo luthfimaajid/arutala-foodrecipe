@@ -31,10 +31,7 @@ public class RecipeController {
 
     @GetMapping("/book-recipes")
     public ResponseEntity<Object> getBookRecipes(GetRecipesQueryParams params) {
-        log.info(params.toString());
-        MyUserDetails userDetails = UserDetailsServiceImpl.getUserDetailsFromContext();
-
-        List<RecipeDto> bookRecipes = recipeService.getBookRecipes(userDetails, params);
+        List<RecipeDto> bookRecipes = recipeService.getBookRecipes(params);
 
         return ResponseHandler.ok(ResponseMessage.Success.DEFAULT, bookRecipes);
     }
