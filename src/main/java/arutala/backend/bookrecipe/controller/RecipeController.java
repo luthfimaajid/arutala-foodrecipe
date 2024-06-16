@@ -1,6 +1,6 @@
 package arutala.backend.bookrecipe.controller;
 
-import arutala.backend.bookrecipe.dto.BookRecipeDto;
+import arutala.backend.bookrecipe.dto.RecipeDto;
 import arutala.backend.bookrecipe.dto.request.AddRecipeRequest;
 import arutala.backend.bookrecipe.dto.request.GetRecipesQueryParams;
 import arutala.backend.bookrecipe.model.MyUserDetails;
@@ -13,10 +13,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/book-recipe")
@@ -36,14 +34,18 @@ public class RecipeController {
         log.info(params.toString());
         MyUserDetails userDetails = UserDetailsServiceImpl.getUserDetailsFromContext();
 
-        List<BookRecipeDto> bookRecipes = recipeService.getBookRecipes(userDetails, params);
+        List<RecipeDto> bookRecipes = recipeService.getBookRecipes(userDetails, params);
 
         return ResponseHandler.ok(ResponseMessage.Success.DEFAULT, bookRecipes);
     }
 
     @GetMapping("/book-recipes/{recipe_id}")
-    public ResponseEntity<Object> getBookRecipe(@PathVariable("recipe_id") String recipeId) {
-        return ResponseEntity.ok().build();
+    public ResponseEntity<Object> getBookRecipe(@PathVariable("recipe_id") Integer recipeId) {
+        MyUserDetails userDetails = UserDetailsServiceImpl.getUserDetailsFromContext();
+
+        RecipeDto recipe = recipeService.getRecipeDetailById(userDetails, recipeId);
+
+        return ResponseHandler.ok(ResponseMessage.Success.DEFAULT, recipe);
     }
 
     @PostMapping("/book-recipes")
@@ -56,7 +58,7 @@ public class RecipeController {
     }
 
     @PutMapping("/book-recipes/{recipe_id}")
-    public ResponseEntity<Object> updateBookRecipe(@PathVariable("recipe_id") Integer recipeId, @RequestBody BookRecipeDto request) {
+    public ResponseEntity<Object> updateBookRecipe(@PathVariable("recipe_id") Integer recipeId, @RequestBody RecipeDto request) {
         // pass user id from jwt auth details
         return ResponseEntity.ok().build();
     }

@@ -22,9 +22,6 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Object> exceptionHandler(Exception e) {
         String message = e.getMessage();
-        if (message == null) {
-            message = ResponseMessage.Failed.INTERNAL_SERVER_ERROR;
-        }
 
         if (e instanceof EntityNotFoundException || e instanceof NoSuchElementException) {
             return ResponseHandler.notFound(message);
@@ -53,6 +50,7 @@ public class GlobalExceptionHandler {
             return ResponseHandler.conflict(message);
         }
 
-        return ResponseHandler.internalServerError(message);
+        log.error(e.getMessage(), e);
+        return ResponseHandler.internalServerError(ResponseMessage.Failed.INTERNAL_SERVER_ERROR);
     }
 }

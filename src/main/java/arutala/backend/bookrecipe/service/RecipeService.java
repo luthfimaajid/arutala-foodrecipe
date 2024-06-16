@@ -1,6 +1,6 @@
 package arutala.backend.bookrecipe.service;
 
-import arutala.backend.bookrecipe.dto.BookRecipeDto;
+import arutala.backend.bookrecipe.dto.RecipeDto;
 import arutala.backend.bookrecipe.dto.request.AddRecipeRequest;
 import arutala.backend.bookrecipe.dto.request.GetRecipesQueryParams;
 import arutala.backend.bookrecipe.model.*;
@@ -10,20 +10,15 @@ import arutala.backend.bookrecipe.util.MinIo;
 import arutala.backend.bookrecipe.util.ResponseMessage;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.criteria.CriteriaBuilder;
-import jakarta.persistence.criteria.CriteriaQuery;
-import jakarta.persistence.criteria.Predicate;
-import jakarta.persistence.criteria.Root;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
-import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -69,7 +64,7 @@ public class RecipeService {
         recipeRepository.save(recipe);
     }
 
-    public List<BookRecipeDto> getBookRecipes(MyUserDetails userDetails, GetRecipesQueryParams params) {
+    public List<RecipeDto> getBookRecipes(MyUserDetails userDetails, GetRecipesQueryParams params) {
         try {
             Specification<Recipe> specification = Specification.where(RecipeSpecification.userId(userDetails.getId()));
             Pageable pageable = PageRequest.of(0, 10);
@@ -101,7 +96,7 @@ public class RecipeService {
                 }
             }
 
-            return recipeRepository.findAll(specification, pageable).stream().map(BookRecipeDto::createGetRecipesDto).collect(Collectors.toList());
+            return recipeRepository.findAll(specification, pageable).stream().map(RecipeDto::createGetRecipesDto).collect(Collectors.toList());
         } catch (Exception e) {
             log.error(e.getMessage());
             throw e;
@@ -123,5 +118,10 @@ public class RecipeService {
         }
 
         return recipeRepository.save(recipe);
+    }
+
+    public RecipeDto getRecipeDetailById(MyUserDetails userDetails, Integer recipeId) {
+        Recipe recipe = recipeRepository.findByIdAndUserId(recipeId, userDetails.getId()).orElseThrow(() -> new EntityNotFoundException(ResponseMessage.Failed.RECIPE_NOT_FOUND));
+        return RecipeDto.createGetRecipeDetailDto(recipe);
     }
 }

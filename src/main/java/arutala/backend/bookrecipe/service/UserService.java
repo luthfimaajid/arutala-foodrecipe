@@ -77,16 +77,14 @@ public class UserService {
 
         User u = user.get();
 
-        // generate token
         String token = jwt.generateToken(u);
-
 
         return SignInResponse.builder()
                 .id(u.getId())
                 .username(u.getUsername())
                 .role(u.getRole())
                 .token(token)
-                .type("JWT")
+                .type("ACCESS TOKEN")
                 .build();
     }
 

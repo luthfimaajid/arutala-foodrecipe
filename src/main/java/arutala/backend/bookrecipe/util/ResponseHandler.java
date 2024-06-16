@@ -68,7 +68,7 @@ public class ResponseHandler {
                 .statusCode(httpStatus.value())
                 .status(httpStatus.getReasonPhrase())
                 .data(data)
-                .total(data instanceof List<?> ? ((List<?>) data).size() : null)
+                .total(data instanceof List<?> ? ((List<?>) data).size() : 1)
                 .build();
 
     }

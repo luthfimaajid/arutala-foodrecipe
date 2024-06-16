@@ -1,6 +1,5 @@
 package arutala.backend.bookrecipe.dto;
 
-import arutala.backend.bookrecipe.model.FavoriteFood;
 import arutala.backend.bookrecipe.model.Recipe;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -14,7 +13,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class BookRecipeDto {
+public class RecipeDto {
     @JsonProperty("recipe_id")
     private Integer recipeId;
 
@@ -39,7 +38,7 @@ public class BookRecipeDto {
 
     private LevelDto levels;
 
-    private static BookRecipeDto createFromModel(Recipe recipe) {
+    private static RecipeDto createFromModel(Recipe recipe) {
         CategoryDto categoryDto = CategoryDto.createFromModel(recipe.getCategory());
         LevelDto levelDto = LevelDto.createFromModel(recipe.getLevel());
         Boolean isFavorite = Boolean.FALSE;
@@ -47,7 +46,7 @@ public class BookRecipeDto {
             isFavorite = recipe.getFavoriteFood().getIsFavorite();
         }
 
-        return BookRecipeDto.builder()
+        return RecipeDto.builder()
                 .recipeId(recipe.getId())
                 .recipeName(recipe.getRecipeName())
                 .imageUrl(recipe.getImageFilename())
@@ -60,11 +59,15 @@ public class BookRecipeDto {
                 .build();
     }
 
-    public static BookRecipeDto createGetRecipesDto(Recipe recipe) {
-        BookRecipeDto bookRecipeDto = createFromModel(recipe);
-        bookRecipeDto.setHowToCook(null);
-        bookRecipeDto.setIngredient(null);
+    public static RecipeDto createGetRecipesDto(Recipe recipe) {
+        RecipeDto recipeDto = createFromModel(recipe);
+        recipeDto.setHowToCook(null);
+        recipeDto.setIngredient(null);
 
-        return bookRecipeDto;
+        return recipeDto;
+    }
+
+    public static RecipeDto createGetRecipeDetailDto(Recipe recipe) {
+        return createFromModel(recipe);
     }
 }
