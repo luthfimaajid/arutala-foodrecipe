@@ -20,7 +20,10 @@ public class RecipeSpecification {
                 return spec.toPredicate(root, query, criteriaBuilder);
             }
         });
+    }
 
+    public static Specification<Recipe> notDeleted() {
+        return ((root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("isDeleted"), Boolean.FALSE));
     }
 
     public static Specification<Recipe> userId(Integer userId) {

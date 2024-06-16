@@ -65,12 +65,12 @@ public class RecipeService {
 
     public List<RecipeDto> getBookRecipes(GetRecipesQueryParams params) {
         try {
-            Specification<Recipe> specification = Specification.where(null);
+            Specification<Recipe> specification = Specification.where(RecipeSpecification.notDeleted());
             Pageable pageable = PageRequest.of(0, 10);
 
             if (params != null) {
                 if (params.getUserId() != null) {
-                    specification = Specification.where(RecipeSpecification.userId(params.getUserId()));
+                    specification = specification.and(RecipeSpecification.userId(params.getUserId()));
                 }
 
                 if (params.getRecipeName() != null) {
@@ -107,7 +107,7 @@ public class RecipeService {
     }
 
     public Recipe addRecipeToFavorites(MyUserDetails userDetails, Integer recipeId) {
-        Recipe recipe = recipeRepository.findByIdAndUserId(recipeId, userDetails.getId()).orElseThrow(() -> new EntityNotFoundException(ResponseMessage.Failed.RECIPE_NOT_FOUND));
+        Recipe recipe = recipeRepository.findByIdAndUserIdAndIsDeleted(recipeId, userDetails.getId(), Boolean.FALSE).orElseThrow(() -> new EntityNotFoundException(ResponseMessage.Failed.RECIPE_NOT_FOUND));
 
         if (recipe.getFavoriteFood() != null) {
             recipe.getFavoriteFood().setIsFavorite(!recipe.getFavoriteFood().getIsFavorite());
@@ -124,12 +124,12 @@ public class RecipeService {
     }
 
     public RecipeDto getRecipeDetailById(MyUserDetails userDetails, Integer recipeId) {
-        Recipe recipe = recipeRepository.findByIdAndUserId(recipeId, userDetails.getId()).orElseThrow(() -> new EntityNotFoundException(ResponseMessage.Failed.RECIPE_NOT_FOUND));
+        Recipe recipe = recipeRepository.findByIdAndUserIdAndIsDeleted(recipeId, userDetails.getId(), Boolean.FALSE).orElseThrow(() -> new EntityNotFoundException(ResponseMessage.Failed.RECIPE_NOT_FOUND));
         return RecipeDto.createGetRecipeDetailDto(recipe);
     }
 
     public Recipe updateRecipe(MyUserDetails userDetails, Integer recipeId, AddRecipeRequest request) {
-        Recipe recipe = recipeRepository.findByIdAndUserId(recipeId, userDetails.getId()).orElseThrow(() -> new EntityNotFoundException(ResponseMessage.Failed.RECIPE_NOT_FOUND));
+        Recipe recipe = recipeRepository.findByIdAndUserIdAndIsDeleted(recipeId, userDetails.getId(), Boolean.FALSE).orElseThrow(() -> new EntityNotFoundException(ResponseMessage.Failed.RECIPE_NOT_FOUND));
 
         Level level = masterService.getLevelById(request.getLevel_id());
         Category category = masterService.getCategoryById(request.getCategory_id());
@@ -148,6 +148,12 @@ public class RecipeService {
         recipe.setHowToCook(request.getHow_to_cook());
         recipe.setIngredient(request.getIngredient());
 
+        return recipeRepository.save(recipe);
+    }
+
+    public Recipe deleteRecipe(MyUserDetails userDetails, Integer recipeId) {
+        Recipe recipe = recipeRepository.findByIdAndUserIdAndIsDeleted(recipeId, userDetails.getId(), Boolean.FALSE).orElseThrow(() -> new EntityNotFoundException(ResponseMessage.Failed.RECIPE_NOT_FOUND));
+        recipe.setIsDeleted(Boolean.TRUE);
         return recipeRepository.save(recipe);
     }
 }

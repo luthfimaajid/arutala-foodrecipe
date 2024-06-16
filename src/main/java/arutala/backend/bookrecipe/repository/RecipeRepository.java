@@ -7,5 +7,5 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import java.util.Optional;
 
 public interface RecipeRepository extends JpaRepository<Recipe, Integer>, JpaSpecificationExecutor<Recipe> {
-    Optional<Recipe> findByIdAndUserId(Integer id, Integer userId);
+    Optional<Recipe> findByIdAndUserIdAndIsDeleted(Integer id, Integer userId, Boolean isDeleted);
 }

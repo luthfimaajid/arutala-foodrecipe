@@ -82,7 +82,10 @@ public class RecipeController {
 
     @DeleteMapping("/book-recipes/{recipe_id}")
     public ResponseEntity<Object> deleteBookRecipe(@PathVariable("recipe_id") Integer recipeId) {
-        // pass user id from jwt auth details
-        return ResponseEntity.ok().build();
+        MyUserDetails userDetails = UserDetailsServiceImpl.getUserDetailsFromContext();
+
+        Recipe recipe = recipeService.deleteRecipe(userDetails, recipeId);
+
+        return ResponseHandler.ok(String.format(ResponseMessage.Success.RECIPE_DELETED, recipe.getRecipeName()), 0);
     }
 }
