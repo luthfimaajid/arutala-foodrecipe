@@ -18,7 +18,7 @@ public class SignUpRequest {
     private String username;
 
     @NotNull(message = ResponseMessage.Failed.EMPTY_COLUMN)
-    @Pattern(regexp = "^[a-zA-Z0-9]{1,255}$", message = ResponseMessage.Failed.NAME_CONTAIN_SPECIAL_CHARACTER)
+    @Pattern(regexp = "^[a-zA-Z]{1,255}$", message = ResponseMessage.Failed.CONTAIN_SPECIAL_CHARACTER)
     private String fullname;
 
     @NotNull(message = ResponseMessage.Failed.EMPTY_COLUMN)

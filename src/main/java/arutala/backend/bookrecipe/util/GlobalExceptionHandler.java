@@ -11,6 +11,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,6 +49,10 @@ public class GlobalExceptionHandler {
 
         if (e instanceof EntityExistsException) {
             return ResponseHandler.conflict(message);
+        }
+
+        if (e instanceof MaxUploadSizeExceededException) {
+            return ResponseHandler.badRequset(ResponseMessage.Failed.MAX_FILE_SIZE_EXCEEDED, List.of(ResponseMessage.Failed.MAX_FILE_SIZE_EXCEEDED));
         }
 
         log.error(e.getMessage(), e);

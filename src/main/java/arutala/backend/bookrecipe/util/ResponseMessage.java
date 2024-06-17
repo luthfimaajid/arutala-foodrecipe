@@ -18,11 +18,13 @@ public class ResponseMessage {
         public static final String WRONG_PASSWORD = "Kata sandi tidak sesuai";
         public static final String USERNAME_MALFORMED = "Format username belum sesuai";
         public static final String PASSWORD_MINIUM_SPECIFICATION = "Kata sandi harus memiliki minimal 6 karakter kombinasi angka dan huruf.";
-        public static final String NAME_CONTAIN_SPECIAL_CHARACTER = "Format nama lengkap belum sesuai. (Tidak menggunakan special character dan maksimal 255 charackter)";
+        public static final String CONTAIN_SPECIAL_CHARACTER = "Format %s belum sesuai. (Tidak menggunakan special character dan angka serta maksimal 255 charackter)";
         public static final String COLUMN_MAX_CHARACTERS_EXCEEDED = "%s tidak boleh lebih dari %d karakter";
         public static final String EMPTY_COLUMN = "Kolom %s tidak boleh kosong";
         public static final String PASSWORD_LENGTH = "Kata sandi tidak boleh kurang dari 6 karakter";
         public static final String PASSWORD_CONFIRMATION_MISSMATCH = "Konfirmasi kata sandi tidak sama dengan kata sandi.";
         public static final String RECIPE_NOT_FOUND = "Resep masakan tidak ditemukan";
+        public static final String TIME_COOK_INVALID = "Kolom TimeCook hanya boleh berisi angka 1-999";
+        public static final String MAX_FILE_SIZE_EXCEEDED = "Format gambar tidak sesuai / Gambar melebihi batas maksimal ukuran (1MB)";
     }
 }

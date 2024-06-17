@@ -9,6 +9,7 @@ import arutala.backend.bookrecipe.service.RecipeService;
 import arutala.backend.bookrecipe.service.UserDetailsServiceImpl;
 import arutala.backend.bookrecipe.util.ResponseHandler;
 import arutala.backend.bookrecipe.util.ResponseMessage;
+import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -50,7 +51,7 @@ public class RecipeController {
     }
 
     @PostMapping("/book-recipes")
-    public ResponseEntity<Object> addBookRecipe(@ModelAttribute AddRecipeRequest request) {
+    public ResponseEntity<Object> addBookRecipe(@Valid @ModelAttribute AddRecipeRequest request) {
         MyUserDetails userDetails = UserDetailsServiceImpl.getUserDetailsFromContext();
 
         recipeService.addRecipe(userDetails, request);
@@ -59,7 +60,7 @@ public class RecipeController {
     }
 
     @PutMapping("/book-recipes/{recipe_id}")
-    public ResponseEntity<Object> updateBookRecipe(@PathVariable("recipe_id") Integer recipeId, @ModelAttribute AddRecipeRequest request) {
+    public ResponseEntity<Object> updateBookRecipe(@PathVariable("recipe_id") Integer recipeId, @Valid @ModelAttribute AddRecipeRequest request) {
         MyUserDetails userDetails = UserDetailsServiceImpl.getUserDetailsFromContext();
 
         Recipe recipe = recipeService.updateRecipe(userDetails, recipeId, request);
