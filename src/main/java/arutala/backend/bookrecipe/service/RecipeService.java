@@ -37,7 +37,7 @@ public class RecipeService {
     private MinIo minIo;
 
     @Transactional
-    public void addRecipe(MyUserDetails userDetails, AddRecipeRequest request) {
+    public Recipe addRecipe(MyUserDetails userDetails, AddRecipeRequest request) {
         User user = userService.getUserById(userDetails.getId());
         Level level = masterService.getLevelById(request.getLevel_id());
         Category category = masterService.getCategoryById(request.getCategory_id());
@@ -60,7 +60,7 @@ public class RecipeService {
                 .isDeleted(Boolean.FALSE)
                 .build();
 
-        recipeRepository.save(recipe);
+        return recipeRepository.save(recipe);
     }
 
     public List<RecipeDto> getBookRecipes(GetRecipesQueryParams params) {

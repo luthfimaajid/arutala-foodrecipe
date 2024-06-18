@@ -2,11 +2,14 @@ package arutala.backend.bookrecipe.dto.request;
 
 import arutala.backend.bookrecipe.util.ResponseMessage;
 import jakarta.validation.constraints.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.ToString;
 import org.springframework.web.multipart.MultipartFile;
 
 @Data
+@Builder
 public class AddRecipeRequest {
     @ToString.Exclude
     @NotNull(message = ResponseMessage.Failed.EMPTY_COLUMN)
