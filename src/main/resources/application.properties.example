@@ -1,0 +1,22 @@
+# SPRING
+spring.application.name=arutala-bookrecipe
+server.port=8079
+spring.servlet.multipart.max-file-size=1MB
+spring.jpa.show-sql=true
+
+# DB
+spring.datasource.url=
+spring.datasource.username=
+spring.datasource.password=
+spring.jpa.hibernate.ddl-auto=validate
+
+# MinIO
+minio.url=
+minio.username=
+minio.password=
+minio.bucket=
+
+# JWT
+jwt.secret=
+jwt.refresh.expiration=999999999
+jwt.access.expiration=999999999
